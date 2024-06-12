@@ -22,18 +22,26 @@ const initialFriends = [
 ];
 
 export default function App() {
+  const [friends, setFriends] = useState(initialFriends);
   const [showAddFriend, setShowAddFriend] = useState(false);
 
   const handleShowAddFriend = function () {
     setShowAddFriend((showAddFriend) => !showAddFriend);
   };
 
+  const handleAddFriend = function (friend) {
+    setFriends((friends) => [...friends, friend]);
+
+    // after adding new friend, close the form
+    setShowAddFriend(false);
+  };
+
   return (
     <>
       <div className="app">
         <div className="sidebar">
-          <FriendsList />
-          {showAddFriend && <FormAddFriend />}
+          <FriendsList friends={friends} />
+          {showAddFriend && <FormAddFriend onAddFriend={handleAddFriend} />}
           <Button onClick={handleShowAddFriend}>
             {showAddFriend ? "Close" : "Add Friend"}
           </Button>
@@ -55,9 +63,7 @@ function Button({ children, onClick }) {
 }
 
 // FriendsList component
-function FriendsList() {
-  const friends = initialFriends;
-
+function FriendsList({ friends }) {
   return (
     <>
       <ul>
@@ -94,15 +100,52 @@ function Friend({ friend }) {
 }
 
 // FormAddFriend component
-function FormAddFriend() {
+function FormAddFriend({ onAddFriend }) {
+  const [name, setName] = useState("");
+  const [image, setImage] = useState("https://i.pravatar.cc/48");
+
+  const handleSubmit = function (e) {
+    e.preventDefault();
+
+    if (!name || !image) {
+      return;
+    }
+
+    // crypto.randomUUID() - good way of generating random IDs right in the browser. Built-in browser tool
+    const id = crypto.randomUUID();
+
+    // new friend object
+    const newFriend = {
+      id,
+      name,
+      image: `${image}?=${id}`,
+      balance: 0,
+    };
+
+    // calling onAddFriend function to add new friend to the 'friends' array
+    onAddFriend(newFriend);
+
+    // after submission, going back to defaults
+    setName("");
+    setImage("https://i.pravatar.cc/48");
+  };
+
   return (
     <>
-      <form className="form-add-friend">
+      <form className="form-add-friend" onSubmit={handleSubmit}>
         <label>👫 Friend Name</label>
-        <input type="text" />
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
 
         <label>🌄 Image URL</label>
-        <input type="text" />
+        <input
+          type="text"
+          value={image}
+          onChange={(e) => setImage(e.target.value)}
+        />
 
         <Button>Add</Button>
       </form>
