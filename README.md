@@ -1,5 +1,7 @@
 # Eat-N-Split 🍽️🧾
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/ebe12e07-58ee-48ac-b62b-4507a59c37c2/deploy-status)](https://app.netlify.com/sites/fulgur-vividus-eat-n-split/deploys)
+
 ## Overview 📝
 
 Eat-N-Split is a React application developed using `npx create-react-app`. This project focuses on practicing state management, event handling, and creating interactive components in React. The application helps users manage and split expenses for group bills, making it easy to track and divide costs among participants.
